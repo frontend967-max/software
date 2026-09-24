@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import styles from "../../app.module.css";
 import InnerHeader from "../../InnerHeader";
-import { getProfile, getSession, saveProfile, type Profile } from "../../auth";
+import { getProfile, saveProfile, type Profile } from "../../auth";
+import { useSession } from "../../../session";
 import {
   UserIcon,
   MailIcon,
@@ -26,16 +27,16 @@ const EMPTY: Profile = {
 };
 
 export default function PersonalDetailsPage() {
+  const { user } = useSession();
   const [form, setForm] = useState<Profile>(EMPTY);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const sess = getSession();
     const p = getProfile();
     setForm({
       ...EMPTY,
-      fullName: p.fullName ?? sess?.name ?? "",
-      email: p.email ?? sess?.email ?? "",
+      fullName: p.fullName ?? user?.name ?? "",
+      email: p.email ?? user?.email ?? "",
       phone: p.phone ?? "",
       dob: p.dob ?? "",
       address1: p.address1 ?? "",
@@ -44,7 +45,7 @@ export default function PersonalDetailsPage() {
       zip: p.zip ?? "",
       country: p.country ?? "United States",
     });
-  }, []);
+  }, [user]);
 
   const set = (k: keyof Profile, v: string) => {
     setForm((f) => ({ ...f, [k]: v }));

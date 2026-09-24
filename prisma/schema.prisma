@@ -1,0 +1,71 @@
+// GameHub data model.
+// Balance is derived from APPROVED transactions, never stored directly.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TxKind {
+  DEPOSIT
+  PAYOUT
+}
+
+enum TxMethod {
+  CASH
+  CARD
+  BITCOIN
+  OTHER
+}
+
+enum TxStatus {
+  PENDING
+  APPROVED
+  DECLINED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+  gamePlays    GamePlay[]
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      TxKind
+  method    TxMethod @default(OTHER)
+  amount    Decimal  @db.Decimal(12, 2)
+  status    TxStatus @default(PENDING)
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([status])
+}
+
+model GamePlay {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameSlug  String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([gameSlug])
+}

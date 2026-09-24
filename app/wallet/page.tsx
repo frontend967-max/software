@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./app.module.css";
-import { getSession } from "./auth";
+import { useSession } from "../session";
 import {
   CalendarIcon,
   BellIcon,
@@ -16,13 +16,39 @@ import {
   ChevronIcon,
 } from "./icons";
 
+type Activity = {
+  id: string;
+  kind: "DEPOSIT" | "PAYOUT";
+  method: string;
+  amount: number;
+  status: "PENDING" | "APPROVED" | "DECLINED";
+  createdAt: string;
+};
+
+const money = (n: number) =>
+  n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+
 export default function HomePage() {
   const router = useRouter();
-  const [name, setName] = useState("there");
+  const { user } = useSession();
+  const name = user?.name?.split(" ")[0] ?? "there";
+
+  const [balance, setBalance] = useState<number | null>(null);
+  const [activity, setActivity] = useState<Activity[]>([]);
 
   useEffect(() => {
-    const sess = getSession();
-    if (sess?.name) setName(sess.name.split(" ")[0]);
+    let alive = true;
+    fetch("/api/wallet", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (!alive) return;
+        setBalance(typeof data.balance === "number" ? data.balance : 0);
+        setActivity(Array.isArray(data.activity) ? data.activity : []);
+      })
+      .catch(() => alive && setBalance(0));
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const quickActions = [
@@ -35,8 +61,8 @@ export default function HomePage() {
     <div className={styles.screen}>
       <div className={styles.topbar}>
         <div className={styles.logo}>
-          <b>$L</b>
-          <span>sweep</span>
+          <b>G</b>
+          <span>GameHub</span>
         </div>
         <div className={styles.iconRow}>
           <button className={styles.iconBtn} aria-label="Calendar">
@@ -54,12 +80,14 @@ export default function HomePage() {
         <div className={styles.deskGrid}>
           <div className={`${styles.deskCard} ${styles.balanceCard}`}>
             <div className={styles.balLabelRow}>
-              <span className={styles.balLabel}>SL Sweep balance</span>
+              <span className={styles.balLabel}>GameHub balance</span>
               <span className={styles.eye} aria-label="Toggle balance">
                 <EyeIcon />
               </span>
             </div>
-            <div className={styles.balance}>$0.00</div>
+            <div className={styles.balance}>
+              {balance === null ? "—" : money(balance)}
+            </div>
 
             <div className={styles.actions}>
               <button
@@ -100,21 +128,49 @@ export default function HomePage() {
         <h2 className={styles.sectionTitle} style={{ marginTop: 28 }}>
           Recent activity
         </h2>
-        <div className={styles.empty}>
-          <div className={styles.emptyIcon}>
-            <ReceiptIcon />
+        {activity.length === 0 ? (
+          <div className={styles.empty}>
+            <div className={styles.emptyIcon}>
+              <ReceiptIcon />
+            </div>
+            <div className={styles.emptyTitle}>No recent transactions</div>
+            <p className={styles.emptyText}>
+              Your add-funds, game-load, and cash-out activity will appear here.
+            </p>
+            <button
+              className={styles.btnBlock}
+              onClick={() => router.push("/wallet/add-funds")}
+            >
+              Add funds
+            </button>
           </div>
-          <div className={styles.emptyTitle}>No recent transactions</div>
-          <p className={styles.emptyText}>
-            Your add-funds, game-load, and cash-out activity will appear here.
-          </p>
-          <button
-            className={styles.btnBlock}
-            onClick={() => router.push("/wallet/add-funds")}
-          >
-            Add funds
-          </button>
-        </div>
+        ) : (
+          <div className={styles.list}>
+            {activity.map((a) => (
+              <div key={a.id} className={styles.listItem}>
+                <span className={styles.listIcon}>
+                  {a.kind === "DEPOSIT" ? <PlusIcon /> : <ReceiptIcon />}
+                </span>
+                <span className={styles.listLabel}>
+                  {a.kind === "DEPOSIT" ? "Add funds" : "Cash out"} · {a.method}
+                  <br />
+                  <span className={styles.activityMeta}>
+                    {new Date(a.createdAt).toLocaleDateString()} ·{" "}
+                    {a.status.toLowerCase()}
+                  </span>
+                </span>
+                <span
+                  className={
+                    a.kind === "DEPOSIT" ? styles.amtIn : styles.amtOut
+                  }
+                >
+                  {a.kind === "DEPOSIT" ? "+" : "−"}
+                  {money(a.amount)}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

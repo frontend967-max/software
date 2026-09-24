@@ -1,15 +1,10 @@
-"use client";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getSession } from "./wallet/auth";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace(getSession() ? "/wallet" : "/login");
-  }, [router]);
-
-  return <div style={{ minHeight: "100vh", background: "#fff" }} />;
+export default async function Page() {
+  const session = await getSession();
+  redirect(session ? "/wallet" : "/login");
 }

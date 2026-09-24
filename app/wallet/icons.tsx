@@ -297,3 +297,48 @@ export const GlobeIcon = () =>
       <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9S14.5 18.5 12 21c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" />
     </>
   );
+
+export const UsersIcon = () =>
+  wrap(
+    <>
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+      <path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M17.5 20a5.5 5.5 0 0 0-3-4.9" />
+    </>
+  );
+
+export const ChartIcon = () =>
+  wrap(
+    <>
+      <path d="M4 20V4" />
+      <path d="M4 20h16" />
+      <rect x="7.5" y="12" width="2.6" height="5" rx="0.6" />
+      <rect x="12" y="8.5" width="2.6" height="8.5" rx="0.6" />
+      <rect x="16.5" y="6" width="2.6" height="11" rx="0.6" />
+    </>
+  );
+
+export const WalletIcon = () =>
+  wrap(
+    <>
+      <rect x="3" y="6" width="18" height="13" rx="3" />
+      <path d="M3 9h18" />
+      <circle cx="17" cy="13" r="1.3" fill="currentColor" stroke="none" />
+    </>
+  );
+
+export const TrendUpIcon = () =>
+  wrap(
+    <>
+      <path d="M4 15l5-5 4 4 7-7" />
+      <path d="M15 4h6v6" />
+    </>
+  );
+
+export const TrendDownIcon = () =>
+  wrap(
+    <>
+      <path d="M4 9l5 5 4-4 7 7" />
+      <path d="M15 20h6v-6" />
+    </>
+  );

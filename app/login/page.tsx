@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../wallet/app.module.css";
-import { setSession } from "../wallet/auth";
 import { MailIcon, LockIcon } from "../wallet/icons";
 
 export default function LoginPage() {
@@ -11,16 +10,33 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password) {
       setErr("Enter your email and password.");
       return;
     }
-    const name = email.split("@")[0].replace(/[._-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-    setSession({ name: name || "Player", email: email.trim() });
-    router.replace("/wallet");
+    setErr("");
+    setBusy(true);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErr(data.error || "Login failed.");
+        setBusy(false);
+        return;
+      }
+      router.replace("/wallet");
+    } catch {
+      setErr("Something went wrong. Please try again.");
+      setBusy(false);
+    }
   };
 
   return (
@@ -28,12 +44,12 @@ export default function LoginPage() {
       <div className={styles.appBg} />
     <form className={styles.auth} onSubmit={submit}>
       <div className={styles.authLogo}>
-        <b>$L</b>
-        <span>sweep</span>
+        <b>G</b>
+        <span>GameHub</span>
       </div>
 
       <h1 className={styles.authTitle}>Welcome back</h1>
-      <p className={styles.authSub}>Log in to your SL Sweep account.</p>
+      <p className={styles.authSub}>Log in to your GameHub account.</p>
 
       <div className={styles.field}>
         <label>Email</label>
@@ -65,8 +81,8 @@ export default function LoginPage() {
 
       {err && <div className={styles.authErr}>{err}</div>}
 
-      <button className={styles.authBtn} type="submit">
-        Log in
+      <button className={styles.authBtn} type="submit" disabled={busy}>
+        {busy ? "Logging in…" : "Log in"}
       </button>
 
       <p className={styles.authSwap}>

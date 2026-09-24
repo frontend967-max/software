@@ -1,31 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getSession } from "./auth";
+import { SessionProvider, useSession } from "../session";
 import Dock from "./Dock";
 import Sidebar from "./Sidebar";
 import SupportFab from "./SupportFab";
 import styles from "./app.module.css";
 
-export default function WalletLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function WalletShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
+  const { user, loading } = useSession();
 
+  // Middleware is the real gate; this is a client-side fallback.
   useEffect(() => {
-    if (!getSession()) {
-      router.replace("/login");
-    } else {
-      setReady(true);
-    }
-  }, [router]);
+    if (!loading && !user) router.replace("/login");
+  }, [loading, user, router]);
 
-  if (!ready) {
-    return <div style={{ minHeight: "100vh", background: "#fff" }} />;
+  if (loading || !user) {
+    return <div className={styles.bootScreen} />;
   }
 
   return (
@@ -36,5 +29,17 @@ export default function WalletLayout({
       <SupportFab />
       <Dock />
     </>
+  );
+}
+
+export default function WalletLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <SessionProvider>
+      <WalletShell>{children}</WalletShell>
+    </SessionProvider>
   );
 }

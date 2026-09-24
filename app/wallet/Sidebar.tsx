@@ -1,9 +1,8 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import styles from "./app.module.css";
-import { clearSession, getSession } from "./auth";
+import { useSession } from "../session";
 import {
   HomeIcon,
   GameIcon,
@@ -11,6 +10,7 @@ import {
   CashOutIcon,
   AccountIcon,
   LogoutIcon,
+  ShieldIcon,
 } from "./icons";
 
 const NAV = [
@@ -23,35 +23,26 @@ const NAV = [
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [sess, setSess] = useState<{ name: string; email: string } | null>(null);
-
-  useEffect(() => {
-    setSess(getSession());
-  }, []);
+  const { user, logout } = useSession();
 
   const isActive = (route: string) =>
     route === "/wallet" ? pathname === "/wallet" : pathname.startsWith(route);
 
-  const initials = (sess?.name ?? "G")
+  const initials = (user?.name ?? "G")
     .split(" ")
     .map((p) => p[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
 
-  const logout = () => {
-    clearSession();
-    router.replace("/login");
-  };
-
   return (
     <aside className={styles.sidebar}>
       <div className={styles.sbLogo}>
         <span className={styles.sbLogoMark}>
-          <b>$L</b>
-          <span>sweep</span>
+          <b>G</b>
+          <span>Hub</span>
         </span>
-        <span className={styles.sbLogoText}>SL Sweep</span>
+        <span className={styles.sbLogoText}>GameHub</span>
       </div>
 
       <button
@@ -72,14 +63,25 @@ export default function Sidebar() {
             {n.label}
           </button>
         ))}
+        {user?.role === "ADMIN" && (
+          <button
+            className={styles.sbItem}
+            onClick={() => router.push("/admin")}
+          >
+            <span className={styles.sbIcon}>
+              <ShieldIcon />
+            </span>
+            Admin
+          </button>
+        )}
       </nav>
 
       <div className={styles.sbFooter}>
         <button className={styles.sbUser} onClick={() => router.push("/wallet/account")}>
           <span className={styles.sbAvatar}>{initials}</span>
           <span className={styles.sbUserInfo}>
-            <span className={styles.sbUserName}>{sess?.name ?? "Guest"}</span>
-            <span className={styles.sbUserEmail}>{sess?.email ?? ""}</span>
+            <span className={styles.sbUserName}>{user?.name ?? "Guest"}</span>
+            <span className={styles.sbUserEmail}>{user?.email ?? ""}</span>
           </span>
         </button>
         <button className={styles.sbLogout} onClick={logout} aria-label="Log out">

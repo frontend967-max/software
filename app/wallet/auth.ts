@@ -1,34 +1,8 @@
-const KEY = "sl_auth";
+// NOTE: real authentication now lives in the signed httpOnly session cookie
+// (see lib/session.ts, lib/auth.ts, middleware.ts and the /api/auth/* routes).
+// This file only keeps the cosmetic profile draft in localStorage.
 
-export type Session = { name: string; email: string };
-
-export function getSession(): Session | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as Session) : null;
-  } catch {
-    return null;
-  }
-}
-
-export function setSession(session: Session) {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(session));
-  } catch {
-    /* ignore */
-  }
-}
-
-export function clearSession() {
-  try {
-    localStorage.removeItem(KEY);
-  } catch {
-    /* ignore */
-  }
-}
-
-const PROFILE_KEY = "sl_profile";
+const PROFILE_KEY = "gh_profile";
 
 export type Profile = {
   fullName: string;

@@ -68,7 +68,7 @@ export default function NotificationsPage() {
       <InnerHeader title="Notifications" />
       <div className={styles.body}>
         <p className={styles.formIntro}>
-          Choose how you want to hear from SL Sweep.
+          Choose how you want to hear from GameHub.
         </p>
         <Section title="Push" rows={push} set={setPush} />
         <div className={styles.divider} />

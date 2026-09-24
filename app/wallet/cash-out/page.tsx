@@ -43,7 +43,7 @@ export default function CashOutPage() {
           </span>
           <div className={styles.optBody}>
             <h3>In a game</h3>
-            <p>Move game winnings back to SL Sweep.</p>
+            <p>Move game winnings back to GameHub.</p>
             <span className={styles.optCta}>Move game winnings</span>
           </div>
           <span className={styles.optChevron}>
@@ -59,11 +59,11 @@ export default function CashOutPage() {
             <CardIcon />
           </span>
           <div className={styles.optBody}>
-            <h3>In your SL balance</h3>
+            <h3>In your GameHub balance</h3>
             <p>
-              Available: $0.00. Send your SL balance to your cash-out method.
+              Available: $0.00. Send your GameHub balance to your cash-out method.
             </p>
-            <span className={styles.optCta}>Cash out SL balance</span>
+            <span className={styles.optCta}>Cash out balance</span>
           </div>
           <span className={styles.optChevron}>
             <ChevronIcon />

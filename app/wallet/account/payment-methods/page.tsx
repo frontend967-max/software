@@ -9,7 +9,7 @@ export default function PaymentMethodsPage() {
     {
       logo: <CashAppIcon />,
       name: "CashApp",
-      sub: "$lingchen",
+      sub: "$gamehub",
       badge: "Default",
     },
     {

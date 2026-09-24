@@ -2211,3 +2211,31 @@
   height: 18px;
   flex: 0 0 auto;
 }
+
+/* ---- GameHub additions (light theme) ---- */
+.bootScreen {
+  min-height: 100vh;
+  background: #fff;
+}
+.activityMeta {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+}
+.amtIn {
+  color: #12ab35;
+  font-weight: 800;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.amtOut {
+  color: #dc2626;
+  font-weight: 800;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.fldPrefix {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b0b0c;
+}

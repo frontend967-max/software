@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Play2win Casino",
-  description: "Play2win — the online casino where every spin can win.",
+  title: "GameHub",
+  description: "GameHub — load up, play, and cash out. Your games, one hub.",
   icons: { icon: "/favicon.svg" },
 };
 
@@ -22,7 +22,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
         {children}

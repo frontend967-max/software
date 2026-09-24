@@ -8,7 +8,7 @@ import { CopyIcon, ShareIcon, CheckIcon } from "../../icons";
 export default function InviteFriendsPage() {
   const [copied, setCopied] = useState(false);
   const code = "LING-SL50";
-  const link = `https://app.slsweep.com/r/${code}`;
+  const link = `https://app.gamehub.gg/r/${code}`;
 
   const copy = async () => {
     try {
@@ -31,7 +31,7 @@ export default function InviteFriendsPage() {
       <InnerHeader title="Invite friends" />
       <div className={styles.body}>
         <p className={styles.formIntro}>
-          Give $50, get $50. Invite friends to SL Sweep and you both earn bonus
+          Give $50, get $50. Invite friends to GameHub and you both earn bonus
           credits when they make their first deposit.
         </p>
 

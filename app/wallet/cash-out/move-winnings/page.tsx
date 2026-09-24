@@ -30,7 +30,7 @@ export default function MoveWinningsPage() {
       <InnerHeader title="Move game winnings" fallback="/wallet/cash-out" />
       <form className={styles.body} onSubmit={submit}>
         <p className={styles.formIntro}>
-          Move winnings from a game back to your SL Sweep balance. From there you
+          Move winnings from a game back to your GameHub balance. From there you
           can cash out to any method.
         </p>
 
@@ -78,18 +78,18 @@ export default function MoveWinningsPage() {
             <b>{fmt(Number(amount) || 0)}</b>
           </div>
           <div className={`${styles.sumRow} ${styles.strong}`}>
-            <span>SL balance receives</span>
+            <span>GameHub balance receives</span>
             <b>{fmt(Number(amount) || 0)}</b>
           </div>
         </div>
 
         {done && (
           <div className={styles.savedToast}>
-            <CheckIcon /> Winnings moved to your SL balance
+            <CheckIcon /> Winnings moved to your GameHub balance
           </div>
         )}
         <button className={styles.btnBlock} type="submit" disabled={!Number(amount)}>
-          Move to SL balance
+          Move to GameHub balance
         </button>
       </form>
     </div>

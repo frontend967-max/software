@@ -46,7 +46,7 @@ export default function ContactPage() {
             <MailIcon />
           </span>
           <div className={styles.methodBody}>
-            <div className={styles.methodName}>support@slsweep.com</div>
+            <div className={styles.methodName}>support@gamehub.gg</div>
             <div className={styles.methodSub}>Replies within a few hours</div>
           </div>
         </div>

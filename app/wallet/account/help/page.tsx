@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     q: "Why is my balance $0.00?",
-    a: "Your SL Sweep balance starts at $0.00. Add funds or move game winnings back to your balance to top it up.",
+    a: "Your GameHub balance starts at $0.00. Add funds or move game winnings back to your balance to top it up.",
   },
   {
     q: "How do I set up a game?",
@@ -63,7 +63,7 @@ export default function HelpPage() {
           </span>
           <div className={styles.methodBody}>
             <div className={styles.methodName}>Email us</div>
-            <div className={styles.methodSub}>support@slsweep.com</div>
+            <div className={styles.methodSub}>support@gamehub.gg</div>
           </div>
           <span className={styles.grTrail}>
             <ChevronIcon />

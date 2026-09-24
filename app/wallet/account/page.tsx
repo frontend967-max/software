@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../app.module.css";
-import { clearSession, getSession } from "../auth";
+import { useSession } from "../../session";
 import {
   UserIcon,
   ShieldIcon,
@@ -25,13 +24,9 @@ const Check = () => (
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [sess, setSess] = useState<{ name: string; email: string } | null>(null);
+  const { user, logout } = useSession();
 
-  useEffect(() => {
-    setSess(getSession());
-  }, []);
-
-  const name = sess?.name ?? "Guest";
+  const name = user?.name ?? "Guest";
   const initials = name
     .split(" ")
     .map((p) => p[0])
@@ -51,13 +46,8 @@ export default function ProfilePage() {
   ];
   const support = [
     { label: "Help & support", sub: "Live chat, FAQ", icon: <HeadsetIcon />, slug: "help" },
-    { label: "Contact us", sub: "support@slsweep.com", icon: <MailIcon />, slug: "contact" },
+    { label: "Contact us", sub: "support@gamehub.gg", icon: <MailIcon />, slug: "contact" },
   ];
-
-  const logout = () => {
-    clearSession();
-    router.replace("/login");
-  };
 
   return (
     <div className={styles.screen}>
@@ -77,7 +67,7 @@ export default function ProfilePage() {
           </span>
           <div>
             <div className={styles.acctName}>{name}</div>
-            <div className={styles.acctEmail}>{sess?.email ?? ""}</div>
+            <div className={styles.acctEmail}>{user?.email ?? ""}</div>
             <div className={styles.acctSince}>Member since Sep 2026</div>
           </div>
         </div>
@@ -167,7 +157,7 @@ export default function ProfilePage() {
           <LogoutIcon />
           Log out
         </button>
-        <div className={styles.appVersion}>SL Sweep · v1.0.0</div>
+        <div className={styles.appVersion}>GameHub · v1.0.0</div>
         </div>
        </div>
       </div>

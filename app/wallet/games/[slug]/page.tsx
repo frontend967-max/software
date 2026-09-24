@@ -39,7 +39,7 @@ export default function GameDetailPage({
   const { slug } = use(params);
   const router = useRouter();
   const game = getGame(slug) ?? GAMES[0];
-  const key = `sl_game_${slug}`;
+  const key = `gh_game_${slug}`;
 
   const [progress, setProgress] = useState<Progress | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
@@ -59,7 +59,7 @@ export default function GameDetailPage({
       p = {
         downloaded: false,
         funded: false,
-        user: `SL_${slug.replace(/-/g, "")}_${rnd}`,
+        user: `GH_${slug.replace(/-/g, "")}_${rnd}`,
         pass,
       };
     }
@@ -96,7 +96,15 @@ export default function GameDetailPage({
   const { downloaded, funded } = progress;
   const unlocked = downloaded && funded;
 
-  const download = () => save({ ...progress, downloaded: true });
+  const download = () => {
+    save({ ...progress, downloaded: true });
+    // Record the play (best-effort) so it feeds favourite-game stats.
+    fetch("/api/wallet/play", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug }),
+    }).catch(() => {});
+  };
   const addFunds = () => {
     if (downloaded) save({ ...progress, funded: true });
     router.push("/wallet/add-funds");
@@ -166,7 +174,7 @@ export default function GameDetailPage({
             <h3>Add funds to the game</h3>
             <p>
               {downloaded
-                ? "Load credits from your SL Sweep balance so you're ready to play."
+                ? "Load credits from your GameHub balance so you're ready to play."
                 : "Finish step 1 first, then load credits to play."}
             </p>
             <button
